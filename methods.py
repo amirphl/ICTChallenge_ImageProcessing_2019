@@ -66,20 +66,115 @@ def get_cart_number(array):
         for c in element[1]:
             if 48 <= ord(c) <= 57:
                 number.append(c)
-            elif c == 'o' or c == '&':
+            elif c == 'o':
                 number.append(0)
             elif c == 'i' or c == 'l':
                 number.append(1)
             elif c == '@':
                 number.append(5)
-            elif c == 's':
+            elif c == 's' or c == '&':
                 number.append(8)
             elif c == 'b':
                 number.append(6)
             elif c == 'm':
                 number.append(1)
                 number.append(2)
+            elif c == ',':
+                number.append(9)
     if len(number) == 16:
         return number
     return None
 
+
+def get_date(array):
+    month = []
+    year = []
+    year_detected = False
+    month_detected = False
+
+    for element in array:
+        text = element[1]
+        number = []
+        for i in range(0, len(text)):
+            if 48 <= ord(text[i]) <= 57:
+                number.append(text[i])
+            elif text[i] == 'o':
+                number.append('0')
+            elif text[i] == 'i' or text[i] == 'l':
+                number.append('1')
+            elif text[i] == '@':
+                number.append('5')
+            elif text[i] == 's' or text[i] == '&':
+                number.append('8')
+            elif text[i] == 'b':
+                number.append('6')
+            elif text[i] == 'm':
+                number.append('1')
+                number.append('2')
+            elif text[i] == ',':
+                number.append('9')
+            else:
+                number.append(text[i])
+        flag = True
+        if len(number) == 7:
+            for i in range(0, 7):
+                if i != 4 and not (48 <= ord(number[i]) <= 57):
+                    flag = False
+                    break
+        if flag:
+            if not year_detected:
+                y1 = ''.join(map(str, number[0:4]))
+                try:
+                    y1 = int(y1)
+                    if 1400 <= y1 <= 1405:
+                        year_detected = True
+                        month_detected = True
+                        year = str(y1).split()
+                except ValueError:
+                    pass
+            if not month_detected:
+                m1 = ''.join(map(str, number[5:len(number)]))
+                try:
+                    m1_copy = m1
+                    m1 = int(m1)
+                    if 1 <= m1 <= 12:
+                        year_detected = True
+                        month_detected = True
+                        month = m1_copy.split()
+                except ValueError:
+                    pass
+
+        if year_detected or month_detected:
+            return year, month
+
+        flag = True
+        if len(number) == 5:
+            for i in range(0, 5):
+                if i != 2 and not (48 <= ord(number[i]) <= 57):
+                    flag = False
+                    break
+        if flag:
+            if not year_detected:
+                y1 = ''.join(map(str, number[0:2]))
+                try:
+                    y1 = int(y1)
+                    if 80 <= y1 <= 99:
+                        year_detected = True
+                        month_detected = True
+                        year = str(y1).split()
+                except ValueError:
+                    pass
+            if not month_detected:
+                m1 = ''.join(map(str, number[3:len(number)]))
+                try:
+                    m1_copy = m1
+                    m1 = int(m1)
+                    if 1 <= m1 <= 12:
+                        year_detected = True
+                        month_detected = True
+                        month = m1_copy.split()
+                except ValueError:
+                    pass
+        if year_detected or month_detected:
+            return year, month
+    return year, month
