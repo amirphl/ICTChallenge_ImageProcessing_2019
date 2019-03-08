@@ -185,7 +185,7 @@ for elements in final_results:
         if month is not None or year is not None:
             date_detected = True
 
-# print('input:', args['image'])
+print('input:', args['image'])
 if len(number) > 0:
     print('cart number', end=':')
 for x in number:
